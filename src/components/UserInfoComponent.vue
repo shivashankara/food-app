@@ -6,9 +6,9 @@
                 <h1>Welcome to {{ store.state.loggedInUser }} </h1>
             </div>
             <div class="col-12">
-                <button type="button" @click="" class="btn btn-primary">Sort by Name</button>&nbsp;
-                <button type="button" class="btn btn-warning">Sort by Email</button>&nbsp;
-                <button type="button" class="btn btn-success">Sort by Address</button>&nbsp;
+                <button type="button" @click="sortByCondition('name')" value="" class="btn btn-primary">Sort by Name</button>&nbsp;
+                <button type="button"  @click="sortByCondition('email')"  class="btn btn-warning">Sort by Email</button>&nbsp;
+                <button type="button"  @click="sortByCondition('address')" class="btn btn-success">Sort by Address</button>&nbsp;
             </div>
             <div class="col-4 gy-3" v-for="(user, index) in store.state.response">
                 <div class="card" style="width: 18rem;">
@@ -29,18 +29,28 @@
 <script setup lang="ts">
 import type { any } from 'node_modules/vue-types/dist';
 import store from '../store/index';
+import { computed } from "vue"
 
-computed: {
-    const sortByCondtion = () => {
-        const sortedRecord = store.state.response.sort((curr: any, prev: any) => {
+
+const sortByCondition = (sorttype:string) => {
+    const sortedRecord = store.state.response.sort((curr: any, prev: any) => {
+        if(sorttype === 'name'){
             if (curr.username < prev.username) { return -1; }
             if (curr.username > prev.username) { return 1; }
             return 0;
+        }else if(sorttype === 'email'){
+            if (curr.email < prev.email) { return -1; }
+            if (curr.email > prev.email) { return 1; }
+            return 0;
+        }else{
+            if (curr.address.street < prev.address.street) { return -1; }
+            if (curr.address.street > prev.address.street) { return 1; }
+            return 0;
+        }
 
-        })
-        return sortedRecord;
-    }
-
+    })
+    return sortedRecord;
 }
+
 </script>
 <style scoped></style>
